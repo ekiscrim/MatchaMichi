@@ -22,6 +22,7 @@ export const updateUserProfile = async (req, res) => {
     const { email, username, currentPassword, newPassword } = req.body;
     const userId = req.user._id;
     try {
+        //TODO MOVE TO USERSERVICE
         let user = await User.findById(userId);
 
         if (!user) {
@@ -50,7 +51,6 @@ export const updateUserProfile = async (req, res) => {
             }
             const salt = await bcrypt.genSalt(10);
             user.password = await bcrypt.hash(newPassword, salt);
-
         }
 
         //TODO ENVIAR EMAILS
@@ -62,7 +62,6 @@ export const updateUserProfile = async (req, res) => {
 
         return res.status(200).json(user);
         
-
     } catch (error) {
         console.log("Error in updateUserProfile: ", error.message);
         res.status(500).json({error: "Internal Server Error"});
